@@ -20,13 +20,20 @@ def hash_file(file_path):
 
 def find_duplicates(start_directory):
     file_hashes = defaultdict(list)
+    total_files = 0
+    processed_files = 0
 
     for root, dirs, files in os.walk(start_directory):
+        total_files += len(files)
         for filename in files:
             file_path = os.path.join(root, filename)
             file_hash = hash_file(file_path)
             file_hashes[file_hash].append(file_path)
-
+            processed_files += 1
+    # Print progress every 100 files
+            if processed_files % 100 == 0:
+                print(f"Processed {processed_files}/{total_files} files...", end='\r')
+    
     # Print duplicates
     for hash_value, file_paths in file_hashes.items():
         if len(file_paths) > 1:
