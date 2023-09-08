@@ -1,7 +1,7 @@
 from collections import defaultdict
 import hashlib
 import os
-
+import time
 # Function to calculate the hash of a file
 
 
@@ -38,5 +38,14 @@ def find_duplicates(start_directory):
 if __name__ == "__main__":
     # start_directory = "/path/to/your/root/directory"
     start_directory = "/Volumes/ImageFields/WildPasture/107_FUJI"
+    
+    # record start time
+    start_time = time.time()
 
     find_duplicates(start_directory)
+
+    # get end time, calculate and print end time
+    end_time = time.time()
+    overall_execution_time = end_time - start_time
+
+    print(f"\nExecution time: {overall_execution_time} seconds")
