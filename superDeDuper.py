@@ -2,6 +2,7 @@ from collections import defaultdict
 import hashlib
 import os
 import time
+import shutil
 # Function to calculate the hash of a file
 
 
@@ -25,21 +26,35 @@ def find_duplicates(start_directory):
 
     for root, dirs, files in os.walk(start_directory):
         total_files += len(files)
-        for filename in files:
-            file_path = os.path.join(root, filename)
-            file_hash = hash_file(file_path)
-            file_hashes[file_hash].append(file_path)
-            processed_files += 1
-    # Print progress every 100 files
-            if processed_files % 100 == 0:
-                print(f"Processed {processed_files}/{total_files} files...", end='\r')
-    
-    # Print duplicates
+
+    for filename in files:
+        file_path = os.path.join(root, filename)
+        file_hash = hash_file(file_path)
+        file_hashes[file_hash].append(file_path)
+        processed_files += 1
+# Print progress every 100 files
+        if processed_files % 100 == 0:
+            print(f"Processed {processed_files}/{total_files} files...", end='\r')
+
+# Create duplicates directory to store dupes before removal
+    duplicates_dir = os.path.join(start_directory, "000duplicates000")
+    os.makedirs(duplicates_dir, exist_ok=True)
+
+# Move duplicates to the duplicates directory
+
+
+# Print duplicates
     for hash_value, file_paths in file_hashes.items():
         if len(file_paths) > 1:
             print("Duplicate files (hash {}):".format(hash_value))
-            for path in file_paths:
+            original_file = file_paths[0]  # Keep the first occurrence
+            for path in file_paths[1:]:
                 print("  -", path)
+                # Construct destination path in duplicates directory
+                destination_path = os.path.join(duplicates_dir, os.path.basename(path))
+                # Move duplicate File
+                shutil.move(path, destination_path)
+                print(f"   -Moved to duplicates directory: {destination_path}")
 
 
 if __name__ == "__main__":
