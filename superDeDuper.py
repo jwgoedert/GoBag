@@ -44,7 +44,7 @@ def find_duplicates(start_directory):
 
 if __name__ == "__main__":
     # start_directory = "/path/to/your/root/directory"
-    start_directory = "/Volumes/ImageFields/WildPasture/107_FUJI"
+    start_directory = input("What path would you like to survey?")
     
     # record start time
     start_time = time.time()
